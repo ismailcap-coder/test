@@ -1,0 +1,63 @@
+@model IList<BuergerPortal.Web.ViewModels.ApplicationViewModel>
+@{
+    ViewBag.Title = "Service Applications";
+}
+
+<h2>Service Applications</h2>
+
+<div class="action-bar">
+    @Html.ActionLink("Create New Application", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Pending Review", "PendingReview", null, new { @class = "btn" })
+</div>
+
+<div class="filter-bar">
+    <strong>Filter by Status:</strong>
+    @Html.ActionLink("All", "Index", new { status = (string)null }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Draft", "Index", new { status = 0 }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Submitted", "Index", new { status = 1 }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Under Review", "Index", new { status = 2 }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Documents Requested", "Index", new { status = 3 }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Approved", "Index", new { status = 4 }, new { @class = "filter-link" }) |
+    @Html.ActionLink("Rejected", "Index", new { status = 5 }, new { @class = "filter-link" })
+</div>
+
+@if (Model.Count > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Application #</th>
+                <th>Citizen</th>
+                <th>Service</th>
+                <th>Office</th>
+                <th>Status</th>
+                <th>Express</th>
+                <th>Fee</th>
+                <th>Submitted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in Model)
+            {
+                <tr>
+                    <td>@app.ApplicationNumber</td>
+                    <td>@app.CitizenName</td>
+                    <td>@app.ServiceTypeName</td>
+                    <td>@app.OfficeName</td>
+                    <td><span class="status-badge status-@app.Status.ToString().ToLower()">@app.Status</span></td>
+                    <td>@(app.IsExpressProcessing ? "Yes" : "No")</td>
+                    <td>@app.CalculatedFee.ToString("C2")</td>
+                    <td>@(app.SubmissionDate.HasValue ? app.SubmissionDate.Value.ToShortDateString() : "N/A")</td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { id = app.ApplicationId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No applications found.</p>
+}

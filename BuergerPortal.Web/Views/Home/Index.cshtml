@@ -1,0 +1,93 @@
+@model BuergerPortal.Web.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div class="dashboard-summary">
+    <div class="summary-card">
+        <h3>Total Citizens</h3>
+        <span class="count">@Model.TotalCitizens</span>
+    </div>
+    <div class="summary-card">
+        <h3>Total Applications</h3>
+        <span class="count">@Model.TotalApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Pending Review</h3>
+        <span class="count">@Model.PendingApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Approved</h3>
+        <span class="count approved">@Model.ApprovedApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Rejected</h3>
+        <span class="count rejected">@Model.RejectedApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Total Fees Collected</h3>
+        <span class="count">@Model.TotalFeesCollected.ToString("C2")</span>
+    </div>
+</div>
+
+<h3>Application Status Summary</h3>
+@if (Model.StatusSummary.Count > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StatusSummary)
+            {
+                <tr>
+                    <td>@item.StatusName</td>
+                    <td>@item.Count</td>
+                    <td>@item.Percentage.ToString("F1")%</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h3>Recent Applications</h3>
+@if (Model.RecentApplications.Count > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Application #</th>
+                <th>Citizen</th>
+                <th>Service</th>
+                <th>Office</th>
+                <th>Status</th>
+                <th>Fee</th>
+                <th>Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RecentApplications)
+            {
+                <tr>
+                    <td>@item.ApplicationNumber</td>
+                    <td>@item.CitizenName</td>
+                    <td>@item.ServiceName</td>
+                    <td>@item.OfficeName</td>
+                    <td><span class="status-badge status-@item.Status.ToString().ToLower()">@item.Status</span></td>
+                    <td>@item.CalculatedFee.ToString("C2")</td>
+                    <td>@item.SubmissionDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No applications found. @Html.ActionLink("Create a new application", "Create", "Application").</p>
+}

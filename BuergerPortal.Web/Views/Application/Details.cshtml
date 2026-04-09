@@ -1,0 +1,125 @@
+@model BuergerPortal.Web.ViewModels.ApplicationViewModel
+@{
+    ViewBag.Title = "Application Details";
+}
+
+<h2>Application Details</h2>
+
+<div class="detail-card">
+    <h3>@Model.ApplicationNumber</h3>
+    <span class="status-badge status-@Model.Status.ToString().ToLower()">@Model.Status</span>
+
+    <table class="detail-table">
+        <tr>
+            <td><strong>Citizen</strong></td>
+            <td>@Model.CitizenName</td>
+        </tr>
+        <tr>
+            <td><strong>Service Type</strong></td>
+            <td>@Model.ServiceTypeName</td>
+        </tr>
+        <tr>
+            <td><strong>Public Office</strong></td>
+            <td>@Model.OfficeName</td>
+        </tr>
+        <tr>
+            <td><strong>Express Processing</strong></td>
+            <td>@(Model.IsExpressProcessing ? "Yes (+50% surcharge)" : "No")</td>
+        </tr>
+        <tr>
+            <td><strong>Calculated Fee</strong></td>
+            <td><strong>@Model.CalculatedFee.ToString("C2")</strong></td>
+        </tr>
+        <tr>
+            <td><strong>Submission Date</strong></td>
+            <td>@(Model.SubmissionDate.HasValue ? Model.SubmissionDate.Value.ToShortDateString() : "Not yet submitted")</td>
+        </tr>
+        <tr>
+            <td><strong>Review Date</strong></td>
+            <td>@(Model.ReviewDate.HasValue ? Model.ReviewDate.Value.ToShortDateString() : "Not yet reviewed")</td>
+        </tr>
+        <tr>
+            <td><strong>Completion Date</strong></td>
+            <td>@(Model.CompletionDate.HasValue ? Model.CompletionDate.Value.ToShortDateString() : "Not completed")</td>
+        </tr>
+        <tr>
+            <td><strong>Deadline</strong></td>
+            <td>@(Model.DeadlineDate.HasValue ? Model.DeadlineDate.Value.ToShortDateString() : "N/A")</td>
+        </tr>
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <tr>
+                <td><strong>Notes</strong></td>
+                <td>@Model.Notes</td>
+            </tr>
+        }
+        @if (!string.IsNullOrEmpty(Model.RejectionReason))
+        {
+            <tr>
+                <td><strong>Rejection Reason</strong></td>
+                <td class="rejection-reason">@Model.RejectionReason</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<h3>Workflow Actions</h3>
+<div class="workflow-actions">
+    @if (Model.Status == BuergerPortal.Domain.Enums.ApplicationStatus.Draft)
+    {
+        using (Html.BeginForm("Submit", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Submit Application" class="btn btn-primary" />
+        }
+    }
+
+    @if (Model.Status == BuergerPortal.Domain.Enums.ApplicationStatus.Submitted)
+    {
+        using (Html.BeginForm("StartReview", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Start Review" class="btn btn-primary" />
+        }
+    }
+
+    @if (Model.Status == BuergerPortal.Domain.Enums.ApplicationStatus.UnderReview)
+    {
+        using (Html.BeginForm("Approve", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Approve" class="btn btn-success" />
+        }
+
+        using (Html.BeginForm("RequestDocuments", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group inline">
+                <input type="text" name="notes" placeholder="Specify required documents..." class="form-control" />
+                <input type="submit" value="Request Documents" class="btn" />
+            </div>
+        }
+
+        using (Html.BeginForm("Reject", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group inline">
+                <input type="text" name="rejectionReason" placeholder="Rejection reason..." class="form-control" />
+                <input type="submit" value="Reject" class="btn btn-danger" />
+            </div>
+        }
+    }
+
+    @if (Model.Status == BuergerPortal.Domain.Enums.ApplicationStatus.DocumentsRequested)
+    {
+        using (Html.BeginForm("StartReview", "Application", new { id = Model.ApplicationId }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Resume Review" class="btn btn-primary" />
+        }
+    }
+</div>
+
+<div class="form-actions">
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn" })
+</div>

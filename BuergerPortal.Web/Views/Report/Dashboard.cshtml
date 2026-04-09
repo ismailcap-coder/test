@@ -1,0 +1,72 @@
+@model BuergerPortal.Web.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Reports Dashboard";
+}
+
+<h2>Reports Dashboard</h2>
+
+<div class="dashboard-summary">
+    <div class="summary-card">
+        <h3>Total Citizens</h3>
+        <span class="count">@Model.TotalCitizens</span>
+    </div>
+    <div class="summary-card">
+        <h3>Total Applications</h3>
+        <span class="count">@Model.TotalApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Pending</h3>
+        <span class="count">@Model.PendingApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Approved</h3>
+        <span class="count approved">@Model.ApprovedApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Rejected</h3>
+        <span class="count rejected">@Model.RejectedApplications</span>
+    </div>
+    <div class="summary-card">
+        <h3>Fees Collected</h3>
+        <span class="count">@Model.TotalFeesCollected.ToString("C2")</span>
+    </div>
+</div>
+
+<h3>Status Breakdown</h3>
+@if (Model.StatusSummary.Count > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+                <th>Percentage</th>
+                <th>Bar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StatusSummary)
+            {
+                <tr>
+                    <td>@item.StatusName</td>
+                    <td>@item.Count</td>
+                    <td>@item.Percentage.ToString("F1")%</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: @item.Percentage.ToString("F0")%"></div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No application data available yet.</p>
+}
+
+<div class="form-actions">
+    @Html.ActionLink("View All Applications", "Index", "Application", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("View by Office", "ApplicationsByOffice", null, new { @class = "btn" })
+</div>

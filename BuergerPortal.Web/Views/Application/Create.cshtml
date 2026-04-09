@@ -1,0 +1,51 @@
+@model BuergerPortal.Web.ViewModels.ApplicationViewModel
+@{
+    ViewBag.Title = "Create Application";
+}
+
+<h2>Create Service Application</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Application Details</legend>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.CitizenId)
+            @Html.DropDownListFor(m => m.CitizenId, Model.Citizens, "-- Select Citizen --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CitizenId)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.ServiceTypeId)
+            @Html.DropDownListFor(m => m.ServiceTypeId, Model.ServiceTypes, "-- Select Service --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.ServiceTypeId)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.OfficeId)
+            @Html.DropDownListFor(m => m.OfficeId, Model.Offices, "-- Select Office --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.OfficeId)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.IsExpressProcessing)
+            @Html.CheckBoxFor(m => m.IsExpressProcessing)
+            <span class="help-text">Express processing adds a 50% surcharge but reduces processing time</span>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Notes)
+            @Html.TextAreaFor(m => m.Notes, new { @class = "form-control", rows = 4 })
+            @Html.ValidationMessageFor(m => m.Notes)
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <input type="submit" value="Create Application" class="btn btn-primary" />
+        @Html.ActionLink("Cancel", "Index", null, new { @class = "btn" })
+    </div>
+}

@@ -1,0 +1,55 @@
+@model IList<BuergerPortal.Web.ViewModels.CitizenViewModel>
+@{
+    ViewBag.Title = "Citizens";
+}
+
+<h2>Citizens</h2>
+
+<div class="action-bar">
+    @Html.ActionLink("Register New Citizen", "Create", null, new { @class = "btn btn-primary" })
+
+    @using (Html.BeginForm("Index", "Citizen", FormMethod.Get, new { @class = "search-form" }))
+    {
+        @Html.TextBox("searchTerm", ViewBag.SearchTerm as string, new { placeholder = "Search by name...", @class = "search-input" })
+        <input type="submit" value="Search" class="btn" />
+    }
+</div>
+
+@if (Model.Count > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>City</th>
+                <th>Tax ID</th>
+                <th>Low Income</th>
+                <th>Registered</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var citizen in Model)
+            {
+                <tr>
+                    <td>@citizen.FullName</td>
+                    <td>@citizen.DateOfBirth.ToShortDateString()</td>
+                    <td>@citizen.City</td>
+                    <td>@citizen.TaxId</td>
+                    <td>@(citizen.IsLowIncome ? "Yes" : "No")</td>
+                    <td>@citizen.RegistrationDate.ToShortDateString()</td>
+                    <td class="actions">
+                        @Html.ActionLink("Details", "Details", new { id = citizen.CitizenId }) |
+                        @Html.ActionLink("Edit", "Edit", new { id = citizen.CitizenId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = citizen.CitizenId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No citizens found.</p>
+}

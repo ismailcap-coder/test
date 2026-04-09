@@ -1,0 +1,66 @@
+@model BuergerPortal.Web.ViewModels.CitizenViewModel
+@{
+    ViewBag.Title = "Citizen Details";
+}
+
+<h2>Citizen Details</h2>
+
+<div class="detail-card">
+    <h3>@Model.FullName</h3>
+
+    <table class="detail-table">
+        <tr>
+            <td><strong>First Name</strong></td>
+            <td>@Model.FirstName</td>
+        </tr>
+        <tr>
+            <td><strong>Last Name</strong></td>
+            <td>@Model.LastName</td>
+        </tr>
+        <tr>
+            <td><strong>Date of Birth</strong></td>
+            <td>@Model.DateOfBirth.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <td><strong>Tax ID</strong></td>
+            <td>@Model.TaxId</td>
+        </tr>
+        <tr>
+            <td><strong>Street Address</strong></td>
+            <td>@Model.StreetAddress</td>
+        </tr>
+        <tr>
+            <td><strong>City</strong></td>
+            <td>@Model.City</td>
+        </tr>
+        <tr>
+            <td><strong>Postal Code</strong></td>
+            <td>@Model.PostalCode</td>
+        </tr>
+        <tr>
+            <td><strong>Phone Number</strong></td>
+            <td>@Model.PhoneNumber</td>
+        </tr>
+        <tr>
+            <td><strong>Email</strong></td>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <td><strong>Low Income</strong></td>
+            <td>@(Model.IsLowIncome ? "Yes - Eligible for 30% fee discount" : "No")</td>
+        </tr>
+        <tr>
+            <td><strong>Registration Date</strong></td>
+            <td>@Model.RegistrationDate.ToShortDateString()</td>
+        </tr>
+        <tr>
+            <td><strong>Active Applications</strong></td>
+            <td>@Model.ApplicationCount</td>
+        </tr>
+    </table>
+</div>
+
+<div class="form-actions">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CitizenId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn" })
+</div>

@@ -1,0 +1,34 @@
+@{
+    ViewBag.Title = "About";
+}
+
+<h2>About BuergerPortal</h2>
+
+<p>@ViewBag.Message</p>
+
+<h3>System Information</h3>
+<table class="data-table">
+    <tr><td><strong>Framework</strong></td><td>.NET Framework 4.5</td></tr>
+    <tr><td><strong>MVC Version</strong></td><td>ASP.NET MVC 4</td></tr>
+    <tr><td><strong>ORM</strong></td><td>Entity Framework 5 (Code First)</td></tr>
+    <tr><td><strong>Database</strong></td><td>PostgreSQL (via Npgsql 2.2.7)</td></tr>
+    <tr><td><strong>Testing</strong></td><td>MSTest v1 + Moq 4.x</td></tr>
+</table>
+
+<h3>Features</h3>
+<ul>
+    <li>Citizen registration and management</li>
+    <li>Service application processing with workflow status tracking</li>
+    <li>Complex fee calculation with district multipliers, discounts, and surcharges</li>
+    <li>Document management for applications</li>
+    <li>Audit log tracking for all status changes</li>
+    <li>Dashboard and reporting</li>
+</ul>
+
+<h3>Business Rules</h3>
+<ul>
+    <li><strong>Fee Calculation:</strong> BaseFee &times; DistrictMultiplier + Express(50%) - LowIncome(30%) - MultiService(10%) + LatePenalty(20%) + VAT(19%)</li>
+    <li><strong>Status Workflow:</strong> Draft &rarr; Submitted &rarr; UnderReview &rarr; Approved/Rejected/DocumentsRequested</li>
+    <li><strong>Age Restrictions:</strong> License (18+), Building Permit (21+), Marriage Certificate (16+)</li>
+    <li><strong>Tax ID Format:</strong> 11 digits (German Steuerliche Identifikationsnummer)</li>
+</ul>
