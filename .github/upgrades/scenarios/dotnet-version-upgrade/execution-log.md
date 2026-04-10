@@ -33,3 +33,8 @@ BuergerPortal.Web upgraded to net8.0 ASP.NET Core MVC. New Program.cs with DI re
 
 BuergerPortal.Tests upgraded to net8.0 with MSTest 4.2.1 + Moq 4.20.72. Replaced legacy QualityTools GAC reference. Converted all [ExpectedException] tests to Assert.ThrowsExactly<T> (MSTest v4 removed ThrowsException). Fixed all nullable warnings. Tests: 82 passed, 0 failed.
 
+
+## [2026-04-10 07:46] 08-final-validation
+
+Full solution build: 0 errors, 0 warnings across all 5 projects targeting net8.0. All 82 tests pass. Migration complete: .NET Framework 4.5 → .NET 8, ASP.NET MVC 4 → ASP.NET Core MVC, EF5 → EF Core 8, Npgsql 2.x → 8.x, MSTest v1 → v4.
+

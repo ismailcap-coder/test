@@ -4,7 +4,7 @@
 
 Upgrading 5 projects from .NET Framework 4.6.2 to .NET 8 using the Bottom-Up strategy. The solution is a classic ASP.NET MVC 4 citizen services portal (BuergerPortal) being modernized to ASP.NET Core MVC with EF Core 8 + Npgsql, SDK-style projects, and MSTest v3.
 
-**Progress**: 7/8 tasks complete <progress value="88" max="100"></progress> 88%
+**Progress**: 8/8 tasks complete <progress value="100" max="100"></progress> 100%
 
 ## Tasks
 
@@ -15,4 +15,4 @@ Upgrading 5 projects from .NET Framework 4.6.2 to .NET 8 using the Bottom-Up str
 - ✅ 05-business: Upgrade BuergerPortal.Business to net8.0 ([Content](tasks/05-business/task.md), [Progress](tasks/05-business/progress-details.md))
 - ✅ 06-web: Upgrade BuergerPortal.Web to net8.0 with ASP.NET Core MVC ([Content](tasks/06-web/task.md), [Progress](tasks/06-web/progress-details.md))
 - ✅ 07-tests: Upgrade BuergerPortal.Tests to net8.0 with MSTest v3 ([Content](tasks/07-tests/task.md), [Progress](tasks/07-tests/progress-details.md))
-- 🔄 08-final-validation: Full solution build, test run, and documentation ([Content](tasks/08-final-validation/task.md))
+- ✅ 08-final-validation: Full solution build, test run, and documentation ([Content](tasks/08-final-validation/task.md), [Progress](tasks/08-final-validation/progress-details.md))
