@@ -12,14 +12,14 @@ namespace BuergerPortal.Tests
     [TestClass]
     public class CitizenServiceTests
     {
-        private Mock<CitizenRepository> _mockRepo;
-        private CitizenValidator _validator;
-        private CitizenService _service;
+        private Mock<CitizenRepository> _mockRepo = null!;
+        private CitizenValidator _validator = null!;
+        private CitizenService _service = null!;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockRepo = new Mock<CitizenRepository>(MockBehavior.Loose, new object[] { null });
+            _mockRepo = new Mock<CitizenRepository>(MockBehavior.Loose, new object[] { null! });
             _validator = new CitizenValidator();
             _service = new CitizenService(_mockRepo.Object, _validator);
         }
@@ -41,14 +41,13 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void GetCitizen_WithInvalidId_ThrowsException()
         {
             // Arrange
-            _mockRepo.Setup(r => r.GetById(999)).Returns((Citizen)null);
+            _mockRepo.Setup(r => r.GetById(999)).Returns((Citizen?)null);
 
-            // Act
-            _service.GetCitizen(999);
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.GetCitizen(999));
         }
 
         [TestMethod]
@@ -107,7 +106,7 @@ namespace BuergerPortal.Tests
         {
             // Arrange
             var citizen = CreateTestCitizen(0, "Petra", "Mueller");
-            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId)).Returns((Citizen)null);
+            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId!)).Returns((Citizen?)null);
 
             // Act
             _service.CreateCitizen(citizen);
@@ -117,29 +116,27 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CreateCitizen_WithDuplicateTaxId_ThrowsException()
         {
             // Arrange
             var existing = CreateTestCitizen(1, "Anna", "Schmidt");
             var newCitizen = CreateTestCitizen(0, "Petra", "Mueller");
             newCitizen.TaxId = existing.TaxId;
-            _mockRepo.Setup(r => r.GetByTaxId(existing.TaxId)).Returns(existing);
+            _mockRepo.Setup(r => r.GetByTaxId(existing.TaxId!)).Returns(existing);
 
-            // Act
-            _service.CreateCitizen(newCitizen);
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.CreateCitizen(newCitizen));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CreateCitizen_WithMissingFirstName_ThrowsValidationException()
         {
             // Arrange
             var citizen = CreateTestCitizen(0, "", "Mueller");
-            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId)).Returns((Citizen)null);
+            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId!)).Returns((Citizen?)null);
 
-            // Act
-            _service.CreateCitizen(citizen);
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.CreateCitizen(citizen));
         }
 
         [TestMethod]
@@ -147,7 +144,7 @@ namespace BuergerPortal.Tests
         {
             // Arrange
             var citizen = CreateTestCitizen(1, "Anna", "Schmidt-Weber");
-            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId)).Returns(citizen);
+            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId!)).Returns(citizen);
 
             // Act
             _service.UpdateCitizen(citizen);
@@ -157,21 +154,19 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void UpdateCitizen_WithConflictingTaxId_ThrowsException()
         {
             // Arrange
             var existingOther = CreateTestCitizen(2, "Klaus", "Weber");
             var citizen = CreateTestCitizen(1, "Anna", "Schmidt");
             citizen.TaxId = existingOther.TaxId;
-            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId)).Returns(existingOther);
+            _mockRepo.Setup(r => r.GetByTaxId(citizen.TaxId!)).Returns(existingOther);
 
-            // Act
-            _service.UpdateCitizen(citizen);
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.UpdateCitizen(citizen));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void DeleteCitizen_WithExistingApplications_ThrowsException()
         {
             // Arrange
@@ -179,8 +174,8 @@ namespace BuergerPortal.Tests
             citizen.Applications = new List<ServiceApplication> { new ServiceApplication() };
             _mockRepo.Setup(r => r.GetByIdWithApplications(1)).Returns(citizen);
 
-            // Act
-            _service.DeleteCitizen(1);
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.DeleteCitizen(1));
         }
 
         [TestMethod]
@@ -215,7 +210,7 @@ namespace BuergerPortal.Tests
         public void CitizenExists_WithUnknownTaxId_ReturnsFalse()
         {
             // Arrange
-            _mockRepo.Setup(r => r.GetByTaxId("00000000000")).Returns((Citizen)null);
+            _mockRepo.Setup(r => r.GetByTaxId("00000000000")).Returns((Citizen?)null);
 
             // Act
             var result = _service.CitizenExists("00000000000");

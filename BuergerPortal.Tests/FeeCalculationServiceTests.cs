@@ -9,7 +9,7 @@ namespace BuergerPortal.Tests
     [TestClass]
     public class FeeCalculationServiceTests
     {
-        private FeeCalculationService _service;
+        private FeeCalculationService _service = null!;
 
         [TestInitialize]
         public void Setup()
@@ -187,39 +187,36 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CalculateFee_NullServiceType_ThrowsException()
         {
             // Arrange
             var office = CreateOffice(1.00m);
             var citizen = CreateCitizen(isLowIncome: false);
 
-            // Act
-            _service.CalculateFee(null, office, citizen, false, 0);
+            // Act & Assert
+            Assert.ThrowsExactly<ArgumentNullException>(() => _service.CalculateFee(null!, office, citizen, false, 0));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CalculateFee_NullOffice_ThrowsException()
         {
             // Arrange
             var serviceType = CreateServiceType(100.00m, ServiceCategory.Document);
             var citizen = CreateCitizen(isLowIncome: false);
 
-            // Act
-            _service.CalculateFee(serviceType, null, citizen, false, 0);
+            // Act & Assert
+            Assert.ThrowsExactly<ArgumentNullException>(() => _service.CalculateFee(serviceType, null!, citizen, false, 0));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CalculateFee_NullCitizen_ThrowsException()
         {
             // Arrange
             var serviceType = CreateServiceType(100.00m, ServiceCategory.Document);
             var office = CreateOffice(1.00m);
 
-            // Act
-            _service.CalculateFee(serviceType, office, null, false, 0);
+            // Act & Assert
+            Assert.ThrowsExactly<ArgumentNullException>(() => _service.CalculateFee(serviceType, office, null!, false, 0));
         }
 
         [TestMethod]

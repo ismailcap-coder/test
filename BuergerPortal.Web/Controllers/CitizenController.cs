@@ -4,27 +4,23 @@ using BuergerPortal.Data;
 using BuergerPortal.Data.Repositories;
 using BuergerPortal.Domain.Entities;
 using BuergerPortal.Web.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 
 namespace BuergerPortal.Web.Controllers
 {
     public class CitizenController : Controller
     {
         private readonly ICitizenService _citizenService;
-        private readonly BuergerPortalContext _context;
 
-        public CitizenController()
+        public CitizenController(ICitizenService citizenService)
         {
-            _context = new BuergerPortalContext();
-            var repo = new CitizenRepository(_context);
-            var validator = new CitizenValidator();
-            _citizenService = new CitizenService(repo, validator);
+            _citizenService = citizenService;
         }
 
-        public ActionResult Index(string searchTerm)
+        public IActionResult Index(string searchTerm)
         {
             var citizens = string.IsNullOrEmpty(searchTerm)
                 ? _citizenService.GetAllCitizens()
@@ -40,8 +36,8 @@ namespace BuergerPortal.Web.Controllers
                     FirstName = c.FirstName,
                     LastName = c.LastName,
                     DateOfBirth = c.DateOfBirth,
-                    City = c.City,
-                    TaxId = c.TaxId,
+                    City = c.City ?? string.Empty,
+                    TaxId = c.TaxId ?? string.Empty,
                     IsLowIncome = c.IsLowIncome,
                     RegistrationDate = c.RegistrationDate
                 };
@@ -53,7 +49,7 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModels);
         }
 
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             var citizen = _citizenService.GetCitizenWithApplications(id);
             var viewModel = MapToViewModel(citizen);
@@ -61,14 +57,14 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View(new CitizenViewModel { DateOfBirth = new DateTime(1980, 1, 1) });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CitizenViewModel viewModel)
+        public IActionResult Create(CitizenViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +83,7 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
             var citizen = _citizenService.GetCitizen(id);
             return View(MapToViewModel(citizen));
@@ -95,7 +91,7 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CitizenViewModel viewModel)
+        public IActionResult Edit(CitizenViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +110,7 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var citizen = _citizenService.GetCitizen(id);
             return View(MapToViewModel(citizen));
@@ -122,7 +118,7 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             try
             {
@@ -145,12 +141,12 @@ namespace BuergerPortal.Web.Controllers
                 FirstName = citizen.FirstName,
                 LastName = citizen.LastName,
                 DateOfBirth = citizen.DateOfBirth,
-                StreetAddress = citizen.StreetAddress,
-                City = citizen.City,
-                PostalCode = citizen.PostalCode,
+                StreetAddress = citizen.StreetAddress ?? string.Empty,
+                City = citizen.City ?? string.Empty,
+                PostalCode = citizen.PostalCode ?? string.Empty,
                 PhoneNumber = citizen.PhoneNumber,
                 Email = citizen.Email,
-                TaxId = citizen.TaxId,
+                TaxId = citizen.TaxId ?? string.Empty,
                 IsLowIncome = citizen.IsLowIncome,
                 RegistrationDate = citizen.RegistrationDate
             };
@@ -175,13 +171,5 @@ namespace BuergerPortal.Web.Controllers
             };
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

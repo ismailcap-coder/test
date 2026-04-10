@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using BuergerPortal.Domain.Enums;
 
 namespace BuergerPortal.Web.ViewModels
@@ -11,7 +11,7 @@ namespace BuergerPortal.Web.ViewModels
         public int ApplicationId { get; set; }
 
         [Display(Name = "Application Number")]
-        public string ApplicationNumber { get; set; }
+        public string? ApplicationNumber { get; set; }
 
         [Required(ErrorMessage = "Citizen is required.")]
         [Display(Name = "Citizen")]
@@ -49,20 +49,20 @@ namespace BuergerPortal.Web.ViewModels
 
         [Display(Name = "Notes")]
         [DataType(DataType.MultilineText)]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [Display(Name = "Rejection Reason")]
         [DataType(DataType.MultilineText)]
-        public string RejectionReason { get; set; }
+        public string? RejectionReason { get; set; }
 
         // Display properties
-        public string CitizenName { get; set; }
-        public string ServiceTypeName { get; set; }
-        public string OfficeName { get; set; }
+        public string? CitizenName { get; set; }
+        public string? ServiceTypeName { get; set; }
+        public string? OfficeName { get; set; }
 
         // Dropdown lists
-        public IEnumerable<SelectListItem> Citizens { get; set; }
-        public IEnumerable<SelectListItem> ServiceTypes { get; set; }
-        public IEnumerable<SelectListItem> Offices { get; set; }
+        public IEnumerable<SelectListItem>? Citizens { get; set; }
+        public IEnumerable<SelectListItem>? ServiceTypes { get; set; }
+        public IEnumerable<SelectListItem>? Offices { get; set; }
     }
 }

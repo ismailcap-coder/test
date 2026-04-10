@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - BuergerPortal</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/jquery")
+    <link rel="stylesheet" href="~/Content/Site.css" />
 </head>
 <body>
     <div id="header">
@@ -35,10 +34,12 @@
     </div>
 
     <div id="footer">
-        <p>&copy; @DateTime.Now.Year - BuergerPortal | Powered by ASP.NET MVC 4</p>
+        <p>&copy; @DateTime.Now.Year - BuergerPortal | Powered by ASP.NET Core MVC</p>
     </div>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

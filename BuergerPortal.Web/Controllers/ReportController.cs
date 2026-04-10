@@ -1,5 +1,5 @@
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using BuergerPortal.Data;
 using BuergerPortal.Domain.Enums;
 using BuergerPortal.Web.ViewModels;
@@ -10,12 +10,12 @@ namespace BuergerPortal.Web.Controllers
     {
         private readonly BuergerPortalContext _context;
 
-        public ReportController()
+        public ReportController(BuergerPortalContext context)
         {
-            _context = new BuergerPortalContext();
+            _context = context;
         }
 
-        public ActionResult Dashboard()
+        public IActionResult Dashboard()
         {
             var dashboard = new DashboardViewModel
             {
@@ -58,7 +58,7 @@ namespace BuergerPortal.Web.Controllers
             return View(dashboard);
         }
 
-        public ActionResult ApplicationsByOffice()
+        public IActionResult ApplicationsByOffice()
         {
             var data = _context.PublicOffices
                 .ToList()
@@ -77,13 +77,5 @@ namespace BuergerPortal.Web.Controllers
             return View(data);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

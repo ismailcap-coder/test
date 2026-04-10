@@ -11,7 +11,7 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(100)]
-        public string Action { get; set; }
+        public string Action { get; set; } = null!;
 
         public int? PreviousStatus { get; set; }
 
@@ -19,13 +19,13 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(100)]
-        public string PerformedBy { get; set; }
+        public string PerformedBy { get; set; } = null!;
 
         public DateTime Timestamp { get; set; }
 
         [StringLength(500)]
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
-        public virtual ServiceApplication Application { get; set; }
+        public virtual ServiceApplication Application { get; set; } = null!;
     }
 }

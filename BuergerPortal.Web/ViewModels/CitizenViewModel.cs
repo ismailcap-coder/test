@@ -12,12 +12,12 @@ namespace BuergerPortal.Web.ViewModels
         [Required(ErrorMessage = "First name is required.")]
         [StringLength(50, ErrorMessage = "First name cannot exceed 50 characters.")]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Last name is required.")]
         [StringLength(50, ErrorMessage = "Last name cannot exceed 50 characters.")]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Date of birth is required.")]
         [DataType(DataType.Date)]
@@ -26,27 +26,27 @@ namespace BuergerPortal.Web.ViewModels
 
         [Required(ErrorMessage = "Street address is required.")]
         [Display(Name = "Street Address")]
-        public string StreetAddress { get; set; }
+        public string StreetAddress { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "City is required.")]
-        public string City { get; set; }
+        public string City { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Postal code is required.")]
         [RegularExpression(@"^\d{5}$", ErrorMessage = "Postal code must be exactly 5 digits.")]
         [Display(Name = "Postal Code")]
-        public string PostalCode { get; set; }
+        public string PostalCode { get; set; } = string.Empty;
 
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid email address.")]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required(ErrorMessage = "Tax ID is required.")]
         [RegularExpression(@"^\d{11}$", ErrorMessage = "Tax ID must be exactly 11 digits.")]
         [Display(Name = "Tax ID")]
-        public string TaxId { get; set; }
+        public string TaxId { get; set; } = string.Empty;
 
         [Display(Name = "Low Income")]
         public bool IsLowIncome { get; set; }

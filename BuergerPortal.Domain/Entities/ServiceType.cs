@@ -10,11 +10,11 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(100)]
-        public string ServiceName { get; set; }
+        public string ServiceName { get; set; } = null!;
 
         [Required]
         [StringLength(10)]
-        public string ServiceCode { get; set; }
+        public string ServiceCode { get; set; } = null!;
 
         public ServiceCategory Category { get; set; }
 
@@ -23,7 +23,7 @@ namespace BuergerPortal.Domain.Entities
         public int ProcessingDays { get; set; }
 
         [StringLength(500)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public bool RequiresInPersonVisit { get; set; }
 

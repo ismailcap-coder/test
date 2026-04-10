@@ -11,7 +11,7 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(10)]
-        public string DistrictCode { get; set; }
+        public string DistrictCode { get; set; } = null!;
 
         public decimal AdjustedBaseFee { get; set; }
 
@@ -19,6 +19,6 @@ namespace BuergerPortal.Domain.Entities
 
         public DateTime? EffectiveTo { get; set; }
 
-        public virtual ServiceType ServiceType { get; set; }
+        public virtual ServiceType ServiceType { get; set; } = null!;
     }
 }

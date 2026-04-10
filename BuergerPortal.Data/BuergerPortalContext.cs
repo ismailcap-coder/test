@@ -1,26 +1,24 @@
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 using BuergerPortal.Domain.Entities;
 
 namespace BuergerPortal.Data
 {
     public class BuergerPortalContext : DbContext
     {
-        public BuergerPortalContext()
-            : base("Name=BuergerPortalContext")
+        public BuergerPortalContext(DbContextOptions<BuergerPortalContext> options)
+            : base(options)
         {
-            Configuration.LazyLoadingEnabled = true;
-            Configuration.ProxyCreationEnabled = true;
         }
 
-        public DbSet<Citizen> Citizens { get; set; }
-        public DbSet<PublicOffice> PublicOffices { get; set; }
-        public DbSet<ServiceType> ServiceTypes { get; set; }
-        public DbSet<ServiceApplication> ServiceApplications { get; set; }
-        public DbSet<ApplicationDocument> ApplicationDocuments { get; set; }
-        public DbSet<AuditLog> AuditLogs { get; set; }
-        public DbSet<FeeSchedule> FeeSchedules { get; set; }
+        public DbSet<Citizen> Citizens => Set<Citizen>();
+        public DbSet<PublicOffice> PublicOffices => Set<PublicOffice>();
+        public DbSet<ServiceType> ServiceTypes => Set<ServiceType>();
+        public DbSet<ServiceApplication> ServiceApplications => Set<ServiceApplication>();
+        public DbSet<ApplicationDocument> ApplicationDocuments => Set<ApplicationDocument>();
+        public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+        public DbSet<FeeSchedule> FeeSchedules => Set<FeeSchedule>();
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Citizen configuration
             modelBuilder.Entity<Citizen>()
@@ -33,8 +31,9 @@ namespace BuergerPortal.Data
                 .Property(c => c.TaxId).HasMaxLength(11);
             modelBuilder.Entity<Citizen>()
                 .HasMany(c => c.Applications)
-                .WithRequired(a => a.Citizen)
-                .HasForeignKey(a => a.CitizenId);
+                .WithOne(a => a.Citizen)
+                .HasForeignKey(a => a.CitizenId)
+                .IsRequired();
 
             // PublicOffice configuration
             modelBuilder.Entity<PublicOffice>()
@@ -45,8 +44,9 @@ namespace BuergerPortal.Data
                 .Property(o => o.DistrictMultiplier).HasPrecision(5, 2);
             modelBuilder.Entity<PublicOffice>()
                 .HasMany(o => o.Applications)
-                .WithRequired(a => a.Office)
-                .HasForeignKey(a => a.OfficeId);
+                .WithOne(a => a.Office)
+                .HasForeignKey(a => a.OfficeId)
+                .IsRequired();
 
             // ServiceType configuration
             modelBuilder.Entity<ServiceType>()
@@ -57,8 +57,9 @@ namespace BuergerPortal.Data
                 .Property(s => s.BaseFee).HasPrecision(10, 2);
             modelBuilder.Entity<ServiceType>()
                 .HasMany(s => s.Applications)
-                .WithRequired(a => a.ServiceType)
-                .HasForeignKey(a => a.ServiceTypeId);
+                .WithOne(a => a.ServiceType)
+                .HasForeignKey(a => a.ServiceTypeId)
+                .IsRequired();
 
             // ServiceApplication configuration
             modelBuilder.Entity<ServiceApplication>()
@@ -69,12 +70,14 @@ namespace BuergerPortal.Data
                 .Property(a => a.CalculatedFee).HasPrecision(10, 2);
             modelBuilder.Entity<ServiceApplication>()
                 .HasMany(a => a.Documents)
-                .WithRequired(d => d.Application)
-                .HasForeignKey(d => d.ApplicationId);
+                .WithOne(d => d.Application)
+                .HasForeignKey(d => d.ApplicationId)
+                .IsRequired();
             modelBuilder.Entity<ServiceApplication>()
                 .HasMany(a => a.AuditLogs)
-                .WithRequired(l => l.Application)
-                .HasForeignKey(l => l.ApplicationId);
+                .WithOne(l => l.Application)
+                .HasForeignKey(l => l.ApplicationId)
+                .IsRequired();
 
             // ApplicationDocument configuration
             modelBuilder.Entity<ApplicationDocument>()
@@ -98,9 +101,10 @@ namespace BuergerPortal.Data
             modelBuilder.Entity<FeeSchedule>()
                 .Property(f => f.DistrictCode).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<FeeSchedule>()
-                .HasRequired(f => f.ServiceType)
+                .HasOne(f => f.ServiceType)
                 .WithMany(s => s.FeeSchedules)
-                .HasForeignKey(f => f.ServiceTypeId);
+                .HasForeignKey(f => f.ServiceTypeId)
+                .IsRequired();
 
             // Table name mappings
             modelBuilder.Entity<Citizen>().ToTable("Citizens");

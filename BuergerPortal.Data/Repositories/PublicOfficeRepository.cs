@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using BuergerPortal.Domain.Entities;
 
 namespace BuergerPortal.Data.Repositories
@@ -17,12 +16,12 @@ namespace BuergerPortal.Data.Repositories
             _context = context;
         }
 
-        public virtual PublicOffice GetById(int id)
+        public virtual PublicOffice? GetById(int id)
         {
             return _context.PublicOffices.Find(id);
         }
 
-        public virtual PublicOffice GetByDistrictCode(string districtCode)
+        public virtual PublicOffice? GetByDistrictCode(string districtCode)
         {
             return _context.PublicOffices.FirstOrDefault(o => o.DistrictCode == districtCode);
         }
@@ -45,7 +44,7 @@ namespace BuergerPortal.Data.Repositories
 
         public virtual void Update(PublicOffice entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

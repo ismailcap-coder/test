@@ -39,7 +39,7 @@ namespace BuergerPortal.Business.Services
             return citizen;
         }
 
-        public Citizen GetCitizenByTaxId(string taxId)
+        public Citizen? GetCitizenByTaxId(string taxId)
         {
             return _citizenRepository.GetByTaxId(taxId);
         }
@@ -67,7 +67,7 @@ namespace BuergerPortal.Business.Services
                     "Citizen validation failed: " + string.Join("; ", validationResult.Errors));
             }
 
-            if (_citizenRepository.GetByTaxId(citizen.TaxId) != null)
+            if (citizen.TaxId != null && _citizenRepository.GetByTaxId(citizen.TaxId) != null)
             {
                 throw new InvalidOperationException(
                     string.Format("A citizen with Tax ID {0} already exists.", citizen.TaxId));
@@ -86,7 +86,7 @@ namespace BuergerPortal.Business.Services
                     "Citizen validation failed: " + string.Join("; ", validationResult.Errors));
             }
 
-            var existingByTax = _citizenRepository.GetByTaxId(citizen.TaxId);
+            var existingByTax = citizen.TaxId != null ? _citizenRepository.GetByTaxId(citizen.TaxId) : null;
             if (existingByTax != null && existingByTax.CitizenId != citizen.CitizenId)
             {
                 throw new InvalidOperationException(

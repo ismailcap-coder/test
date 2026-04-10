@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using BuergerPortal.Domain.Entities;
 
 namespace BuergerPortal.Data.Repositories
@@ -17,19 +16,19 @@ namespace BuergerPortal.Data.Repositories
             _context = context;
         }
 
-        public virtual Citizen GetById(int id)
+        public virtual Citizen? GetById(int id)
         {
             return _context.Citizens.Find(id);
         }
 
-        public virtual Citizen GetByIdWithApplications(int id)
+        public virtual Citizen? GetByIdWithApplications(int id)
         {
             return _context.Citizens
                 .Include(c => c.Applications)
                 .FirstOrDefault(c => c.CitizenId == id);
         }
 
-        public virtual Citizen GetByTaxId(string taxId)
+        public virtual Citizen? GetByTaxId(string taxId)
         {
             return _context.Citizens.FirstOrDefault(c => c.TaxId == taxId);
         }
@@ -60,7 +59,7 @@ namespace BuergerPortal.Data.Repositories
 
         public virtual void Update(Citizen entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

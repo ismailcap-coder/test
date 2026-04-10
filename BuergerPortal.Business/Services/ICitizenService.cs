@@ -7,7 +7,7 @@ namespace BuergerPortal.Business.Services
     {
         Citizen GetCitizen(int citizenId);
         Citizen GetCitizenWithApplications(int citizenId);
-        Citizen GetCitizenByTaxId(string taxId);
+        Citizen? GetCitizenByTaxId(string taxId);
         IList<Citizen> GetAllCitizens();
         IList<Citizen> SearchCitizens(string searchTerm);
         void CreateCitizen(Citizen citizen);

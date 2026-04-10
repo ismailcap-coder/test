@@ -9,20 +9,20 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(100)]
-        public string OfficeName { get; set; }
+        public string OfficeName { get; set; } = null!;
 
         [Required]
         [StringLength(10)]
-        public string DistrictCode { get; set; }
+        public string DistrictCode { get; set; } = null!;
 
         [StringLength(100)]
-        public string StreetAddress { get; set; }
+        public string? StreetAddress { get; set; }
 
         [StringLength(50)]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [StringLength(20)]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         public decimal DistrictMultiplier { get; set; }
 

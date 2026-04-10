@@ -10,7 +10,7 @@ namespace BuergerPortal.Domain.Entities
         public int ApplicationId { get; set; }
 
         [StringLength(20)]
-        public string ApplicationNumber { get; set; }
+        public string? ApplicationNumber { get; set; }
 
         public int CitizenId { get; set; }
         public int ServiceTypeId { get; set; }
@@ -28,14 +28,14 @@ namespace BuergerPortal.Domain.Entities
         public decimal CalculatedFee { get; set; }
 
         [StringLength(1000)]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [StringLength(500)]
-        public string RejectionReason { get; set; }
+        public string? RejectionReason { get; set; }
 
-        public virtual Citizen Citizen { get; set; }
-        public virtual ServiceType ServiceType { get; set; }
-        public virtual PublicOffice Office { get; set; }
+        public virtual Citizen Citizen { get; set; } = null!;
+        public virtual ServiceType ServiceType { get; set; } = null!;
+        public virtual PublicOffice Office { get; set; } = null!;
         public virtual ICollection<ApplicationDocument> Documents { get; set; }
         public virtual ICollection<AuditLog> AuditLogs { get; set; }
 
