@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using BuergerPortal.Domain.Entities;
 
 namespace BuergerPortal.Data.Repositories
@@ -17,12 +16,12 @@ namespace BuergerPortal.Data.Repositories
             _context = context;
         }
 
-        public virtual ServiceType GetById(int id)
+        public virtual ServiceType? GetById(int id)
         {
             return _context.ServiceTypes.Find(id);
         }
 
-        public virtual ServiceType GetByCode(string serviceCode)
+        public virtual ServiceType? GetByCode(string serviceCode)
         {
             return _context.ServiceTypes.FirstOrDefault(s => s.ServiceCode == serviceCode);
         }
@@ -50,7 +49,7 @@ namespace BuergerPortal.Data.Repositories
 
         public virtual void Update(ServiceType entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
 

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using BuergerPortal.Business.Services;
 using BuergerPortal.Business.Validators;
 using BuergerPortal.Data;
@@ -16,20 +17,13 @@ namespace BuergerPortal.Web.Controllers
         private readonly IApplicationService _applicationService;
         private readonly BuergerPortalContext _context;
 
-        public ApplicationController()
+        public ApplicationController(IApplicationService applicationService, BuergerPortalContext context)
         {
-            _context = new BuergerPortalContext();
-            var appRepo = new ServiceApplicationRepository(_context);
-            var citizenRepo = new CitizenRepository(_context);
-            var serviceTypeRepo = new ServiceTypeRepository(_context);
-            var officeRepo = new PublicOfficeRepository(_context);
-            var feeService = new FeeCalculationService();
-            var validator = new ApplicationValidator();
-            _applicationService = new ApplicationService(
-                appRepo, citizenRepo, serviceTypeRepo, officeRepo, feeService, validator);
+            _applicationService = applicationService;
+            _context = context;
         }
 
-        public ActionResult Index(ApplicationStatus? status)
+        public IActionResult Index(ApplicationStatus? status)
         {
             var applications = status.HasValue
                 ? _applicationService.GetApplicationsByStatus(status.Value)
@@ -59,7 +53,7 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModels);
         }
 
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
             var application = _applicationService.GetApplicationWithDetails(id);
             var viewModel = new ApplicationViewModel
@@ -85,7 +79,7 @@ namespace BuergerPortal.Web.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Create()
+        public IActionResult Create()
         {
             var viewModel = new ApplicationViewModel();
             PopulateDropdowns(viewModel);
@@ -94,7 +88,7 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ApplicationViewModel viewModel)
+        public IActionResult Create(ApplicationViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +99,7 @@ namespace BuergerPortal.Web.Controllers
                         viewModel.ServiceTypeId,
                         viewModel.OfficeId,
                         viewModel.IsExpressProcessing,
-                        viewModel.Notes);
+                        viewModel.Notes ?? string.Empty);
                     TempData["SuccessMessage"] = string.Format(
                         "Application {0} created successfully. Calculated fee: {1:C2}",
                         application.ApplicationNumber, application.CalculatedFee);
@@ -122,11 +116,11 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Submit(int id)
+        public IActionResult Submit(int id)
         {
             try
             {
-                _applicationService.SubmitApplication(id, User.Identity.Name ?? "System");
+                _applicationService.SubmitApplication(id, User.Identity?.Name ?? "System");
                 TempData["SuccessMessage"] = "Application submitted successfully.";
             }
             catch (InvalidOperationException ex)
@@ -138,11 +132,11 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult StartReview(int id)
+        public IActionResult StartReview(int id)
         {
             try
             {
-                _applicationService.StartReview(id, User.Identity.Name ?? "Reviewer");
+                _applicationService.StartReview(id, User.Identity?.Name ?? "Reviewer");
                 TempData["SuccessMessage"] = "Review started.";
             }
             catch (InvalidOperationException ex)
@@ -154,11 +148,11 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RequestDocuments(int id, string notes)
+        public IActionResult RequestDocuments(int id, string notes)
         {
             try
             {
-                _applicationService.RequestDocuments(id, User.Identity.Name ?? "Reviewer", notes);
+                _applicationService.RequestDocuments(id, User.Identity?.Name ?? "Reviewer", notes);
                 TempData["SuccessMessage"] = "Documents requested from citizen.";
             }
             catch (InvalidOperationException ex)
@@ -170,11 +164,11 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Approve(int id)
+        public IActionResult Approve(int id)
         {
             try
             {
-                _applicationService.ApproveApplication(id, User.Identity.Name ?? "Reviewer");
+                _applicationService.ApproveApplication(id, User.Identity?.Name ?? "Reviewer");
                 TempData["SuccessMessage"] = "Application approved.";
             }
             catch (InvalidOperationException ex)
@@ -186,11 +180,11 @@ namespace BuergerPortal.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Reject(int id, string rejectionReason)
+        public IActionResult Reject(int id, string rejectionReason)
         {
             try
             {
-                _applicationService.RejectApplication(id, User.Identity.Name ?? "Reviewer", rejectionReason);
+                _applicationService.RejectApplication(id, User.Identity?.Name ?? "Reviewer", rejectionReason);
                 TempData["SuccessMessage"] = "Application rejected.";
             }
             catch (InvalidOperationException ex)
@@ -200,7 +194,7 @@ namespace BuergerPortal.Web.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
-        public ActionResult PendingReview()
+        public IActionResult PendingReview()
         {
             var applications = _applicationService.GetPendingApplications();
             var viewModels = applications.Select(a => new ApplicationViewModel
@@ -247,13 +241,5 @@ namespace BuergerPortal.Web.Controllers
                 });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

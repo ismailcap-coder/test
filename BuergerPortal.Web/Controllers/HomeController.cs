@@ -1,4 +1,4 @@
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using BuergerPortal.Data;
 using BuergerPortal.Domain.Enums;
 using System.Linq;
@@ -9,12 +9,12 @@ namespace BuergerPortal.Web.Controllers
     {
         private readonly BuergerPortalContext _context;
 
-        public HomeController()
+        public HomeController(BuergerPortalContext context)
         {
-            _context = new BuergerPortalContext();
+            _context = context;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var dashboard = new ViewModels.DashboardViewModel
             {
@@ -80,19 +80,10 @@ namespace BuergerPortal.Web.Controllers
             return View(dashboard);
         }
 
-        public ActionResult About()
+        public IActionResult About()
         {
             ViewData["Message"] = "BuergerPortal - Citizen Services Management for German Public Offices.";
             return View();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _context.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace BuergerPortal.Tests
     [TestClass]
     public class CitizenValidatorTests
     {
-        private CitizenValidator _validator;
+        private CitizenValidator _validator = null!;
 
         [TestInitialize]
         public void Setup()
@@ -34,7 +34,7 @@ namespace BuergerPortal.Tests
         public void Validate_NullCitizen_ReturnsInvalid()
         {
             // Act
-            var result = _validator.Validate(null);
+            var result = _validator.Validate(null!);
 
             // Assert
             Assert.IsFalse(result.IsValid);
@@ -45,7 +45,7 @@ namespace BuergerPortal.Tests
         {
             // Arrange
             var citizen = CreateValidCitizen();
-            citizen.FirstName = null;
+            citizen.FirstName = null!;
 
             // Act
             var result = _validator.Validate(citizen);

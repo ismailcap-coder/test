@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using BuergerPortal.Domain.Entities;
 using BuergerPortal.Domain.Enums;
 
@@ -18,12 +17,12 @@ namespace BuergerPortal.Data.Repositories
             _context = context;
         }
 
-        public virtual ServiceApplication GetById(int id)
+        public virtual ServiceApplication? GetById(int id)
         {
             return _context.ServiceApplications.Find(id);
         }
 
-        public virtual ServiceApplication GetByIdWithDetails(int id)
+        public virtual ServiceApplication? GetByIdWithDetails(int id)
         {
             return _context.ServiceApplications
                 .Include(a => a.Citizen)
@@ -34,7 +33,7 @@ namespace BuergerPortal.Data.Repositories
                 .FirstOrDefault(a => a.ApplicationId == id);
         }
 
-        public virtual ServiceApplication GetByApplicationNumber(string applicationNumber)
+        public virtual ServiceApplication? GetByApplicationNumber(string applicationNumber)
         {
             return _context.ServiceApplications
                 .Include(a => a.Citizen)
@@ -104,7 +103,7 @@ namespace BuergerPortal.Data.Repositories
 
         public virtual void Update(ServiceApplication entity)
         {
-            _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
+            _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
         }
 
@@ -130,13 +129,13 @@ namespace BuergerPortal.Data.Repositories
             _context.SaveChanges();
         }
 
-        // EF5 raw SQL query example
+        // EF Core LINQ equivalent of the former raw SQL query
         public virtual IList<ServiceApplication> GetApplicationsByRawQuery(string districtCode)
         {
-            string sql = "SELECT * FROM \"ServiceApplications\" sa "
-                       + "INNER JOIN \"PublicOffices\" po ON sa.\"OfficeId\" = po.\"OfficeId\" "
-                       + "WHERE po.\"DistrictCode\" = @p0";
-            return _context.Database.SqlQuery<ServiceApplication>(sql, districtCode).ToList();
+            return _context.ServiceApplications
+                .Include(a => a.Office)
+                .Where(a => a.Office != null && a.Office.DistrictCode == districtCode)
+                .ToList();
         }
     }
 }

@@ -23,18 +23,18 @@ namespace BuergerPortal.Web.ViewModels
 
     public class RecentApplicationItem
     {
-        public string ApplicationNumber { get; set; }
-        public string CitizenName { get; set; }
-        public string ServiceName { get; set; }
-        public string OfficeName { get; set; }
+        public string? ApplicationNumber { get; set; }
+        public string? CitizenName { get; set; }
+        public string? ServiceName { get; set; }
+        public string? OfficeName { get; set; }
         public ApplicationStatus Status { get; set; }
         public decimal CalculatedFee { get; set; }
-        public string SubmissionDate { get; set; }
+        public string? SubmissionDate { get; set; }
     }
 
     public class StatusSummaryItem
     {
-        public string StatusName { get; set; }
+        public string StatusName { get; set; } = string.Empty;
         public int Count { get; set; }
         public decimal Percentage { get; set; }
     }

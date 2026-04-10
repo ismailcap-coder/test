@@ -12,7 +12,7 @@ namespace BuergerPortal.Domain.Entities
 
         [Required]
         [StringLength(200)]
-        public string DocumentName { get; set; }
+        public string DocumentName { get; set; } = null!;
 
         public DocumentType DocumentType { get; set; }
 
@@ -21,8 +21,8 @@ namespace BuergerPortal.Domain.Entities
         public bool IsVerified { get; set; }
 
         [StringLength(100)]
-        public string VerifiedBy { get; set; }
+        public string? VerifiedBy { get; set; }
 
-        public virtual ServiceApplication Application { get; set; }
+        public virtual ServiceApplication Application { get; set; } = null!;
     }
 }

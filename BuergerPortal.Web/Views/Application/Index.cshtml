@@ -12,7 +12,7 @@
 
 <div class="filter-bar">
     <strong>Filter by Status:</strong>
-    @Html.ActionLink("All", "Index", new { status = (string)null }, new { @class = "filter-link" }) |
+    @Html.ActionLink("All", "Index", new { status = (string?)null }, new { @class = "filter-link" }) |
     @Html.ActionLink("Draft", "Index", new { status = 0 }, new { @class = "filter-link" }) |
     @Html.ActionLink("Submitted", "Index", new { status = 1 }, new { @class = "filter-link" }) |
     @Html.ActionLink("Under Review", "Index", new { status = 2 }, new { @class = "filter-link" }) |

@@ -13,21 +13,21 @@ namespace BuergerPortal.Tests
     [TestClass]
     public class ApplicationServiceTests
     {
-        private Mock<ServiceApplicationRepository> _mockAppRepo;
-        private Mock<CitizenRepository> _mockCitizenRepo;
-        private Mock<ServiceTypeRepository> _mockServiceTypeRepo;
-        private Mock<PublicOfficeRepository> _mockOfficeRepo;
-        private Mock<IFeeCalculationService> _mockFeeService;
-        private ApplicationValidator _validator;
-        private ApplicationService _service;
+        private Mock<ServiceApplicationRepository> _mockAppRepo = null!;
+        private Mock<CitizenRepository> _mockCitizenRepo = null!;
+        private Mock<ServiceTypeRepository> _mockServiceTypeRepo = null!;
+        private Mock<PublicOfficeRepository> _mockOfficeRepo = null!;
+        private Mock<IFeeCalculationService> _mockFeeService = null!;
+        private ApplicationValidator _validator = null!;
+        private ApplicationService _service = null!;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockAppRepo = new Mock<ServiceApplicationRepository>(MockBehavior.Loose, new object[] { null });
-            _mockCitizenRepo = new Mock<CitizenRepository>(MockBehavior.Loose, new object[] { null });
-            _mockServiceTypeRepo = new Mock<ServiceTypeRepository>(MockBehavior.Loose, new object[] { null });
-            _mockOfficeRepo = new Mock<PublicOfficeRepository>(MockBehavior.Loose, new object[] { null });
+            _mockAppRepo = new Mock<ServiceApplicationRepository>(MockBehavior.Loose, new object[] { null! });
+            _mockCitizenRepo = new Mock<CitizenRepository>(MockBehavior.Loose, new object[] { null! });
+            _mockServiceTypeRepo = new Mock<ServiceTypeRepository>(MockBehavior.Loose, new object[] { null! });
+            _mockOfficeRepo = new Mock<PublicOfficeRepository>(MockBehavior.Loose, new object[] { null! });
             _mockFeeService = new Mock<IFeeCalculationService>();
             _validator = new ApplicationValidator();
 
@@ -88,26 +88,24 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CreateApplication_WithInvalidCitizen_ThrowsException()
         {
             // Arrange
-            _mockCitizenRepo.Setup(r => r.GetById(999)).Returns((Citizen)null);
+            _mockCitizenRepo.Setup(r => r.GetById(999)).Returns((Citizen?)null);
 
-            // Act
-            _service.CreateApplication(999, 1, 1, false, "Notes");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.CreateApplication(999, 1, 1, false, "Notes"));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CreateApplication_WithInvalidServiceType_ThrowsException()
         {
             // Arrange
             _mockCitizenRepo.Setup(r => r.GetById(1)).Returns(CreateTestCitizen(1));
-            _mockServiceTypeRepo.Setup(r => r.GetById(999)).Returns((ServiceType)null);
+            _mockServiceTypeRepo.Setup(r => r.GetById(999)).Returns((ServiceType?)null);
 
-            // Act
-            _service.CreateApplication(1, 999, 1, false, "Notes");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.CreateApplication(1, 999, 1, false, "Notes"));
         }
 
         [TestMethod]
@@ -127,15 +125,14 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SubmitApplication_FromApproved_ThrowsException()
         {
             // Arrange
             var application = CreateTestApplication(1, ApplicationStatus.Approved);
             _mockAppRepo.Setup(r => r.GetByIdWithDetails(1)).Returns(application);
 
-            // Act
-            _service.SubmitApplication(1, "TestUser");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.SubmitApplication(1, "TestUser"));
         }
 
         [TestMethod]
@@ -170,15 +167,14 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ApproveApplication_FromDraft_ThrowsException()
         {
             // Arrange
             var application = CreateTestApplication(1, ApplicationStatus.Draft);
             _mockAppRepo.Setup(r => r.GetById(1)).Returns(application);
 
-            // Act
-            _service.ApproveApplication(1, "Reviewer");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.ApproveApplication(1, "Reviewer"));
         }
 
         [TestMethod]
@@ -198,15 +194,14 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RejectApplication_WithoutReason_ThrowsException()
         {
             // Arrange
             var application = CreateTestApplication(1, ApplicationStatus.UnderReview);
             _mockAppRepo.Setup(r => r.GetById(1)).Returns(application);
 
-            // Act
-            _service.RejectApplication(1, "Reviewer", "");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.RejectApplication(1, "Reviewer", ""));
         }
 
         [TestMethod]
@@ -224,15 +219,14 @@ namespace BuergerPortal.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RequestDocuments_FromDraft_ThrowsException()
         {
             // Arrange
             var application = CreateTestApplication(1, ApplicationStatus.Draft);
             _mockAppRepo.Setup(r => r.GetById(1)).Returns(application);
 
-            // Act
-            _service.RequestDocuments(1, "Reviewer", "Need documents");
+            // Act & Assert
+            Assert.ThrowsExactly<InvalidOperationException>(() => _service.RequestDocuments(1, "Reviewer", "Need documents"));
         }
 
         [TestMethod]

@@ -7,7 +7,7 @@ namespace BuergerPortal.Data.Repositories
 {
     public interface IRepository<T> where T : class
     {
-        T GetById(int id);
+        T? GetById(int id);
         IList<T> GetAll();
         IList<T> Find(Expression<Func<T, bool>> predicate);
         void Add(T entity);

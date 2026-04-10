@@ -9,7 +9,7 @@ namespace BuergerPortal.Tests
     [TestClass]
     public class ApplicationValidatorTests
     {
-        private ApplicationValidator _validator;
+        private ApplicationValidator _validator = null!;
 
         [TestInitialize]
         public void Setup()
@@ -114,7 +114,7 @@ namespace BuergerPortal.Tests
             application.CitizenId = 0;
 
             // Act
-            var result = _validator.ValidateNewApplication(application, null, null);
+            var result = _validator.ValidateNewApplication(application, null!, null!);
 
             // Assert
             Assert.IsFalse(result.IsValid);
